@@ -5,32 +5,31 @@ and modified by jul3sky
 """
 
 
-
+#----WEB PAGE----
 def web_page():
   if led.value() == 1:
     gpio_state="ON"
   else:
     gpio_state="OFF"
   
-  html = """<html><head> <title>ESP Web Server</title> <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="data:,"> <style>html{font-family: Helvetica; display:inline-block; margin: 0px auto; text-align: center;}
-  h1{color: #0F3376; padding: 2vh;}p{font-size: 1.5rem;}.button{display: inline-block; background-color: #e7bd3b; border: none; 
-  border-radius: 4px; color: white; padding: 16px 40px; text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}
-  .button2{background-color: #4286f4;}</style></head><body> <h1>ESP Web Server</h1> 
-  <p>GPIO state: <strong>""" + gpio_state + """</strong></p><p><a href="/?led=on"><button class="button">ON</button></a></p>
-  <p><a href="/?led=off"><button class="button button2">OFF</button></a></p></body></html>"""
-  return html
+  with open("web.html") as f: # external html for web server
+    html = f.read()
 
+  html = html.replace("{{STATE}}", gpio_state)
+  return html # returns a variable that contains html document to build the page
+
+#----SOCKET----
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind(('', 80))
-s.listen(5)
+s.bind(('', 80)) # empty string '' is for ip address
+s.listen(5) # 5 is maximum number of queued connections
 
+#----LOOP CONNECTIONS FOR ON/OFF BUTTONS----
 while True:
   conn, addr = s.accept()
-  print('Got a connection from %s' % str(addr))
+  print(f"Got a connection from {addr}")
   request = conn.recv(1024)
   request = str(request)
-  print('Content = %s' % request)
+  print(f"Content = {request}")
   led_on = request.find('/?led=on')
   led_off = request.find('/?led=off')
   if led_on == 6:
@@ -45,3 +44,23 @@ while True:
   conn.send('Connection: close\n\n')
   conn.sendall(response)
   conn.close()
+
+#----MORSE I/O----
+import morse
+from morse import blink
+
+conn, addr = s.accept()
+print(f"Got a connection from {addr}")
+request = conn.recv(1024)
+
+if "name=" in request:
+  start = request.find("name=") + len("name=")
+  end = request.find(" ", start)
+  morse_text = request[start:end]
+  
+  morse_text = morse_text.replace("%20", " ")
+  morse_text = morse_text.upper()
+
+blink(morse_text)
+
+
