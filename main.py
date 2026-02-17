@@ -4,6 +4,8 @@ https://randomnerdtutorials.com/esp32-esp8266-micropython-web-server/
 and modified by jul3sky
 """
 
+import morse
+from morse import blink
 
 #----WEB PAGE----
 def web_page():
@@ -28,39 +30,35 @@ while True:
   conn, addr = s.accept()
   print(f"Got a connection from {addr}")
   request = conn.recv(1024)
-  request = str(request)
+  request = request.decode()
   print(f"Content = {request}")
-  led_on = request.find('/?led=on')
-  led_off = request.find('/?led=off')
-  if led_on == 6:
+  
+  
+  if '/?led=on' in request:
     print('LED ON')
     led.value(1)
-  if led_off == 6:
+  if '/?led=off' in request:
     print('LED OFF')
     led.value(0)
   response = web_page()
+  #----MORSE I/O----
+  if "name=" in request:
+    start = request.find("name=") + len("name=")
+    end = request.find(" ", start)
+    morse_text = request[start:end]
+    
+    morse_text = morse_text.replace("%20", " ")
+    morse_text = morse_text.upper()
+    
+    blink(morse_text)
+  
   conn.send('HTTP/1.1 200 OK\n')
   conn.send('Content-Type: text/html\n')
   conn.send('Connection: close\n\n')
   conn.sendall(response)
   conn.close()
 
-#----MORSE I/O----
-import morse
-from morse import blink
 
-conn, addr = s.accept()
-print(f"Got a connection from {addr}")
-request = conn.recv(1024)
-
-if "name=" in request:
-  start = request.find("name=") + len("name=")
-  end = request.find(" ", start)
-  morse_text = request[start:end]
-  
-  morse_text = morse_text.replace("%20", " ")
-  morse_text = morse_text.upper()
-
-blink(morse_text)
+ 
 
 
