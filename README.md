@@ -1,135 +1,103 @@
-📡 ESP32 Web‑Controlled Morse Code Server
+============================================================
+ ESP32 MORSE CODE WEB SERVER (MICROPYTHON)
+============================================================
 
-A MicroPython project that turns an ESP32 into a fully functional webserver for controlling GPIO pins and blinking Morse code messages sent from a browser.
+This project turns an ESP32 into a simple web server that lets
+you control an LED and send Morse code messages directly from
+a web browser. The ESP32 serves an external HTML page, handles
+GET requests, and blinks Morse code using a Python module.
 
-This project demonstrates how to combine networking, hardware control, and text parsing on a microcontroller — all through a clean HTML interface served directly from the ESP32.
-🚀 Features
-🔘 LED Control
+------------------------------------------------------------
+ FEATURES
+------------------------------------------------------------
 
-The webpage provides two buttons:
+ - LED ON/OFF control from a web browser
+ - Displays current LED GPIO state on the webpage
+ - Text input field for sending Morse code messages
+ - External HTML file (web.html) served by the ESP32
+ - Morse code handled by morse.py (blink function)
+ - WebREPL enabled at boot for wireless file access
+ - Debug output disabled for cleaner logs
 
-    ON — sets the LED pin HIGH
+------------------------------------------------------------
+ FILES
+------------------------------------------------------------
 
-    OFF — sets the LED pin LOW
+ boot.py      - Enables WebREPL and disables debug output
+ main.py      - Web server, GPIO control, Morse input logic
+ morse.py     - Morse code dictionary + blink() function
+ web.html     - HTML page served to the browser
+ README.txt   - This file
 
-The current GPIO state is displayed dynamically using a placeholder in web.html.
-🔤 Morse Code Input
+------------------------------------------------------------
+ HOW IT WORKS
+------------------------------------------------------------
 
-The webpage includes a text field where the user can enter a message.
-When submitted:
+1. ESP32 boots and runs boot.py:
+      - Debug output disabled
+      - WebREPL started
 
-    The ESP32 receives the HTTP request
+2. main.py starts a socket server on port 80.
 
-    Extracts the name= parameter
+3. A browser connects to the ESP32 and requests the webpage.
 
-    Cleans and uppercases the text
+4. The ESP32 loads web.html and replaces {{STATE}} with the
+   current LED state (ON/OFF).
 
-    Sends it to the blink() function in morse.py
+5. The browser can send commands:
+      /?led=on     -> LED turns ON
+      /?led=off    -> LED turns OFF
+      /?name=TEXT  -> TEXT is blinked in Morse code
 
-    The LED blinks the message in Morse code
+6. The ESP32 parses the request, performs the action, and
+   returns the updated webpage.
 
-🌐 External HTML Page
+------------------------------------------------------------
+ REQUIREMENTS
+------------------------------------------------------------
 
-The webpage is stored in web.html and loaded at runtime.
-A placeholder {{STATE}} is replaced with "ON" or "OFF" before sending the page to the browser.
+ - ESP32 board
+ - MicroPython firmware
+ - Thonny, WebREPL, or similar tool
+ - LED + resistor (or onboard LED)
 
-This keeps the Python code clean and makes the UI easy to edit.
-🧵 WebREPL Support
+------------------------------------------------------------
+ INSTALLATION
+------------------------------------------------------------
 
-The boot.py file enables WebREPL at startup:
-python
+1. Flash MicroPython to the ESP32.
+2. Upload the following files:
+      boot.py
+      main.py
+      morse.py
+      web.html
+3. Reset the ESP32.
+4. Connect to the ESP32 Wi-Fi or your home network.
+5. Open the ESP32 IP address in a browser.
 
-import esp
-esp.osdebug(None)
+------------------------------------------------------------
+ BOOT FILE (boot.py)
+------------------------------------------------------------
 
-import webrepl
-webrepl.start()
+ import esp
+ esp.osdebug(None)
 
-This allows:
+ import webrepl
+ webrepl.start()
 
-    Wireless file uploads
+This enables WebREPL and disables debug output on boot.
 
-    Remote REPL access
+------------------------------------------------------------
+ CUSTOMIZATION
+------------------------------------------------------------
 
-    Debugging without USB
+ - Add more GPIO controls
+ - Add CSS/JS to web.html
+ - Display last Morse message sent
+ - Add non-blocking Morse blinking
+ - Serve multiple pages
+ - Connect to home Wi-Fi instead of AP mode
 
-📁 Project Structure
-Code
-
-/
-├── boot.py        # Enables WebREPL and disables debug output
-├── main.py        # Webserver + GPIO control + Morse input
-├── morse.py       # Morse dictionary + blink() function
-├── web.html       # External HTML page served to clients
-└── README.md      # This file
-
-🧠 How It Works
-1. ESP32 starts a socket server
-
-main.py opens port 80 and listens for incoming HTTP connections.
-2. Browser sends a request
-
-Examples:
-Code
-
-GET /?led=on HTTP/1.1
-GET /?led=off HTTP/1.1
-GET /?name=HELLO HTTP/1.1
-
-3. The server parses the request
-
-    /led=on → LED turns on
-
-    /led=off → LED turns off
-
-    name=... → text extracted and sent to Morse blinker
-
-4. The webpage is loaded from web.html
-
-The placeholder {{STATE}} is replaced with the current LED state.
-5. The page is sent back to the browser
-
-The connection closes and the loop waits for the next request.
-🛠 Requirements
-
-    ESP32 board
-
-    MicroPython firmware
-
-    Thonny, WebREPL, or another uploader
-
-    LED + resistor (or onboard LED)
-
-📦 Installation
-
-    Flash MicroPython to your ESP32
-
-    Upload these files to the device:
-
-        boot.py
-
-        main.py
-
-        morse.py
-
-        web.html
-
-    Reset the ESP32
-
-    Connect to its Wi‑Fi network or your home network
-
-    Open the ESP32’s IP address in a browser
-
-🧩 Customization Ideas
-
-    Add more GPIO controls
-
-    Display the last Morse message sent
-
-    Add non‑blocking blinking so the server stays responsive
-
-    Add CSS or JavaScript for a richer UI
-
-    Serve multiple pages
-
-    Add Wi‑Fi credentials to run on your home network
+------------------------------------------------------------
+ END OF FILE
+============================================================
