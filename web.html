@@ -1,0 +1,39 @@
+<html>
+  <head> 
+    <title>ESP Web Server</title> <!--Name of the Web Server -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,"> 
+    <style>html{font-family: Helvetica; display:inline-block; margin: 0px auto; text-align: center;}
+    h1{color: #49003d; padding: 2vh;}p{font-size: 1.5rem;}
+    .button{display: inline-block; background-color: #26d703; border: none; 
+    border-radius: 4px; color: white; padding: 16px 40px; text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}
+    .button2{background-color: #2d5723;}
+    .button3{display: inline-block; background-color: #017258; border: none; border-radius: 4px; color: white; padding: 16px 40px; text-decoration: none; font-size: 20px; margin: 2px; cursor: pointer;}
+    </style> <!--Styling for buttons -->
+  </head>
+  
+  <body> 
+    <h1>ESP Web Server</h1> 
+    <p><a class="button" href="/?led=on">ON</a></p>
+    <p><a class="button button2" href="/?led=off">OFF</a></p>
+
+    
+    <form> <!--To submit your string -->
+      <label for="name">Your Morse Code (max 16 char.):</label>
+      <p>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          required
+          minlength="3"
+          maxlength="16"
+          size="16" />
+      </p>
+      <p>
+        <input type="submit" value="Send Request" class="button3"/>
+      </p>
+    </form>
+  </body>
+  
+</html>
