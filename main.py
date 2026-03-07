@@ -4,6 +4,11 @@ https://randomnerdtutorials.com/esp32-esp8266-micropython-web-server/
 and modified by jul3sky
 """
 
+try:
+    import usocket as socket
+except:
+    import socket
+  
 import morse
 from morse import blink
 
