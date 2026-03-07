@@ -24,11 +24,16 @@ GET requests, and blinks Morse code using a Python module.
  FILES
 ------------------------------------------------------------
 
- boot.py      - Enables WebREPL and disables debug output
+ boot.py      - Enables uPyCraft IDE and disables debug output
+ 
  main.py      - Web server, GPIO control, Morse input logic
+ 
  morse.py     - Morse code dictionary + blink() function
+ 
  web.html     - HTML page served to the browser
+ 
  README.txt   - This file
+ 
 
 ------------------------------------------------------------
  HOW IT WORKS
