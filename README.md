@@ -1,5 +1,4 @@
-### REPO IS UNDER CONSTRUCTION :)
- # ESP32 MORSE CODE WEB SERVER (MICROPYTHON)
+# ESP32 MORSE CODE WEB SERVER (MICROPYTHON)
  
 ============================================================
 
@@ -9,7 +8,7 @@ a web browser. The ESP32 serves an external HTML page, handles
 GET requests, and blinks Morse code using a Python module.
 
 ------------------------------------------------------------
- FEATURES
+ ## FEATURES
 ------------------------------------------------------------
 
  - LED ON/OFF control from a web browser
@@ -21,7 +20,7 @@ GET requests, and blinks Morse code using a Python module.
  - Debug output disabled for cleaner logs
 
 ------------------------------------------------------------
- FILES
+ ## FILES
 ------------------------------------------------------------
 
  boot.py      - Enables uPyCraft IDE and disables debug output
@@ -32,11 +31,11 @@ GET requests, and blinks Morse code using a Python module.
  
  web.html     - HTML page served to the browser
  
- README.txt   - This file
+ README.md   - This file
  
 
 ------------------------------------------------------------
- HOW IT WORKS
+ ## HOW IT WORKS
 ------------------------------------------------------------
 
 1. ESP32 boots and runs boot.py:
@@ -59,50 +58,41 @@ GET requests, and blinks Morse code using a Python module.
    returns the updated webpage.
 
 ------------------------------------------------------------
- REQUIREMENTS
+ ## REQUIREMENTS
 ------------------------------------------------------------
 
  - ESP32 board
  - MicroPython firmware
- - Thonny, WebREPL, or similar tool
+ - Thonny, WebREPL, uPyCraft or similar tool
  - LED + resistor (or onboard LED)
 
 ------------------------------------------------------------
- INSTALLATION
+ ## INSTALLATION
 ------------------------------------------------------------
 
 1. Flash MicroPython to the ESP32.
 2. Upload the following files:
       boot.py
-      main.py
-      morse.py
-      web.html
-3. Reset the ESP32.
+      uPyMain.py (rename it to main if needed)
+3. Reset the ESP32 (EN button)
 4. Connect to the ESP32 Wi-Fi or your home network.
 5. Open the ESP32 IP address in a browser.
 
 ------------------------------------------------------------
- BOOT FILE (boot.py)
+## POSSIBLE BUGS / TROUBLESHOOTING
 ------------------------------------------------------------
 
- import esp
- esp.osdebug(None)
+- Port 80 blocked → unblock in Windows Firewall
+- Browser hangs → main.py not running or missing socket import
+- “Unable to connect” → ESP32 not on the same Wi‑Fi network
+- Serial port locked → close COM port properly or reset ESP32
+- Missing files → ensure web.html and morse.py are uploaded
+- Wi‑Fi credentials wrong → ESP32 never reaches main.py
 
- import webrepl
- webrepl.start()
-
-This enables WebREPL and disables debug output on boot.
 
 ------------------------------------------------------------
- CUSTOMIZATION
+## RESULT - FULL-ON MORSE WEB SERVER
 ------------------------------------------------------------
-
- - Add more GPIO controls
- - Add CSS/JS to web.html
- - Display last Morse message sent
- - Add non-blocking Morse blinking
- - Serve multiple pages
- - Connect to home Wi-Fi instead of AP mode
 
 ------------------------------------------------------------
  END OF FILE
